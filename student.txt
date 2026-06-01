@@ -1,0 +1,146 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Student {
+    string rollNumber;
+    string name;
+    string age;
+};
+
+vector<Student> loadStudents(string fileName) {
+    vector<Student> students;
+    ifstream file(fileName);
+    string line;
+
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            if (line.empty()) continue;
+
+            stringstream ss(line);
+            Student s;
+
+            getline(ss, s.rollNumber, ',');
+            getline(ss, s.name, ',');
+            getline(ss, s.age, ',');
+
+            students.push_back(s);
+        }
+        file.close();
+    }
+    return students;
+}
+
+void saveStudents(string fileName, const vector<Student>& students) {
+    ofstream file(fileName);
+    if (file.is_open()) {
+        for (const auto& s : students) {
+            file << s.rollNumber << "," << s.name << "," << s.age << "\n";
+        }
+        file.close();
+    }
+}
+
+void searchStudent(const vector<Student>& students) {
+    string roll;
+    cout << "Enter Roll Number to search: ";
+    cin >> roll;
+
+    for (const auto& s : students) {
+        if (s.rollNumber == roll) {
+            cout << "\n--- Student Found ---" << endl;
+            cout << "Roll Number: " << s.rollNumber << endl;
+            cout << "Name:        " << s.name << endl;
+            cout << "Age:         " << s.age << endl;
+            return;
+        }
+    }
+    cout << "Student with Roll Number " << roll << " not found." << endl;
+}
+
+void updateStudent(vector<Student>& students, string fileName) {
+    string roll;
+    cout << "Enter Roll Number to update: ";
+    cin >> roll;
+
+    for (auto& s : students) {
+        if (s.rollNumber == roll) {
+            cout << "Current Name: " << s.name << " -> Enter new name: ";
+            cin >> s.name;
+            cout << "Current Age: " << s.age << " -> Enter new age: ";
+            cin >> s.age;
+
+            saveStudents(fileName, students); // Save modifications to file
+            cout << "Student information updated successfully!" << endl;
+            return;
+        }
+    }
+    cout << "Student not found." << endl;
+}
+
+void deleteStudent(vector<Student>& students, string fileName) {
+    string roll;
+    cout << "Enter Roll Number to delete: ";
+    cin >> roll;
+
+    for (auto it = students.begin(); it != students.end(); ++it) {
+        if (it->rollNumber == roll) {
+            students.erase(it);
+            saveStudents(fileName, students);
+            cout << "Student deleted successfully!" << endl;
+            return;
+        }
+    }
+    cout << "Student not found." << endl;
+}
+
+int main() {
+    string fileName = "students.txt";
+    int choice;
+
+    do {
+
+        vector<Student> students = loadStudents(fileName);
+
+        cout << "\n=========================================" << endl;
+        cout << "        STUDENT MANAGEMENT SYSTEM        " << endl;
+        cout << "=========================================" << endl;
+        cout << "1) Search Student by Roll Number" << endl;
+        cout << "2) Update Student Details" << endl;
+        cout << "3) Update Information (Same as 2)" << endl;
+        cout << "4) Delete Student Information" << endl;
+        cout << "5) Exit Program" << endl;
+        cout << "Enter choice (1-5): ";
+        cin >> choice;
+        cout << "-----------------------------------------" << endl;
+
+        switch (choice) {
+            case 1:
+                searchStudent(students);
+                break;
+            case 2:
+            case 3:
+                updateStudent(students, fileName);
+                break;
+            case 4:
+                deleteStudent(students, fileName);
+                break;
+            case 5:
+                cout << "Exiting program. Goodbye!" << endl;
+                break;
+            default:
+                cout<<"lnvalid choice!please select
+                between 1and 5."<< endl;
+                {
+;
+                {while(choice!=5);
+                return 0;
+
+
+
+
+
